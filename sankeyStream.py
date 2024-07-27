@@ -7,6 +7,10 @@ class Node:
         self.color = color
         self.weight = weight
         self.depth = depth
+        self.pos = {
+            'x': 0,
+            'y': 0
+        }
 
 class Link:
     def __init__(self, source, target, value=0):
@@ -47,14 +51,13 @@ class Sankey:
         self.plot = plt.figure(figsize=(10, 10))
         ax = plt.gca()
         ax.axis('off')
-        y = 0
+        maxDepth = max([node.depth for node in self.nodes])
+        nodeSpacing = 1.0 / (maxDepth + 1)
         for node in self.nodes:
-            ax.text(-1, y, node.label, ha='right', va='center')
-            y -= 1
-        for link in self.links:
-            source = [node for node in self.nodes if node.id == link.source][0]
-            target = [node for node in self.nodes if node.id == link.target][0]
-            ax.plot([0, 1], [source.depth, target.depth], color='black')
+            node.pos['x'] = node.depth * nodeSpacing
+            node.pos['y'] = 0.5
+            ax.text(node.pos['x'], node.pos['y'], node.label, ha='center', va='center', color=node.color)
+        
         return self
 
     def display(self):
