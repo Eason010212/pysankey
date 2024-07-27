@@ -1,6 +1,7 @@
 # SankeyStream
 
 _SankeyStream_, a python library for drawing horizontal, vertical, and circular Sankey diagrams
+
 *CURRENTLY UNDER DEVELOPMENT*
 
 <!-- PROJECT LOGO -->

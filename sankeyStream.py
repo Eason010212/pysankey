@@ -19,7 +19,7 @@ class Sankey:
         self.nodes = nodes
         self.links = links
         self.orientation = orientation
-        self.plot = plt.figure()
+        self.plot = None
         
     def add_node(self, id, **attr):
         node = Node(id, **attr)
@@ -44,16 +44,17 @@ class Sankey:
             raise ValueError('orientation should be h, v, or o')
     
     def draw_h(self):
-        ax = self.plot.add_subplot(1, 1, 1, xticks=[], yticks=[], title='Sankey Diagram')
-        y = [0]
-        for i, node in enumerate(self.nodes):
-            node.depth = i
-            ax.text(0, y[-1], node.label, ha='center', va='center')
-            y.append(y[-1] - node.weight)
+        self.plot = plt.figure(figsize=(10, 10))
+        ax = plt.gca()
+        ax.axis('off')
+        y = 0
+        for node in self.nodes:
+            ax.text(-1, y, node.label, ha='right', va='center')
+            y -= 1
         for link in self.links:
-            source = self.nodes[link.source]
-            target = self.nodes[link.target]
-            ax.plot([0, 1], [y[source.depth], y[target.depth]], color='black')
+            source = [node for node in self.nodes if node.id == link.source][0]
+            target = [node for node in self.nodes if node.id == link.target][0]
+            ax.plot([0, 1], [source.depth, target.depth], color='black')
         return self
 
     def display(self):
